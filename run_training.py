@@ -15,7 +15,7 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 
-def load_config(config_file="config.yaml", **overrides):
+def load_config(config_file="/scratch/hpc/11/xiar3/RosProject/config.yaml", **overrides):
     """Load configuration from YAML file with optional overrides"""
     with open(config_file, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
@@ -66,7 +66,7 @@ def validate_data_paths(config):
         print(f"Please create it or specify a different name with --val-data-name")
         return False
 
-    print("✓ All data paths exist!")
+    print("All data paths exist!")
     return True
 
 
@@ -180,22 +180,22 @@ def main():
         print("STARTING MODEL TRAINING")
         print(f"{'=' * 80}")
         estimator = PoseEstimationEstimator(config=config)
-        print(f"🖥️  Device: {estimator.device}")
-        print(f"📁 Model will be saved to: {os.path.abspath(config.system.log_dir_system)}")
-        print(f"📊 TensorBoard logs: {os.path.abspath(config.system.log_dir_system)}")
+        print(f"Device: {estimator.device}")
+        print(f"Model will be saved to: {os.path.abspath(config.system.log_dir_system)}")
+        print(f"TensorBoard logs: {os.path.abspath(config.system.log_dir_system)}")
         print(f"{'=' * 80}")
 
         # Start training
-        print("🚀 Starting training...")
+        print("Starting training...")
         estimator.train()
 
         # Cleanup
         estimator.writer.done()
         print(f"\n{'=' * 80}")
-        print("✅ TRAINING COMPLETED SUCCESSFULLY!")
-        print(f"📁 Models saved in: {os.path.abspath(config.system.log_dir_system)}")
+        print("TRAINING COMPLETED SUCCESSFULLY!")
+        print(f"Models saved in: {os.path.abspath(config.system.log_dir_system)}")
         print(
-            f"💡 View training progress with: tensorboard --logdir \"{os.path.abspath(config.system.log_dir_system)}\"")
+            f"training progress with: tensorboard --logdir \"{os.path.abspath(config.system.log_dir_system)}\"")
         print(f"{'=' * 80}")
 
     except Exception as e:

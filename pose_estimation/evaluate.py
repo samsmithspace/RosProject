@@ -89,16 +89,16 @@ def evaluate_one_epoch(*, estimator, config, data_loader, epoch, test):
 
 # HELPER
 def evaluation_over_batch(
-    *,
-    estimator,
-    config,
-    data_loader,
-    batch_size,
-    epoch,
-    is_training=True,
-    optimizer=None,
-    criterion_translation=None,
-    criterion_orientation=None,
+        *,
+        estimator,
+        config,
+        data_loader,
+        batch_size,
+        epoch,
+        is_training=True,
+        optimizer=None,
+        criterion_translation=None,
+        criterion_orientation=None,
 ):
     """
     Do the training process for all the estimators (one for each class)
@@ -114,7 +114,7 @@ def evaluation_over_batch(
         criterion_translation (torch.nn): criterion for the evaluation of the translation loss
         criterion_orientation torch.nn: criterion for the evaluation of the orientation loss
     """
-    
+
     sample_size = config.train.sample_size_train if is_training else config.val.sample_size_val
     len_data_loader = sample_size if (sample_size > 0) else len(data_loader)
 
@@ -122,7 +122,7 @@ def evaluation_over_batch(
     metric_orientation = 0
 
     for index, (images, target_translation_list, target_orientation_list) in enumerate(
-        data_loader
+            data_loader
     ):
         images = list(image.to(estimator.device) for image in images)
 
@@ -147,14 +147,15 @@ def evaluation_over_batch(
                 output_orientation, target_orientation
             )
 
-            intermediate_mean_loss_translation = metric_translation / (index + 1)
-            intermediate_mean_loss_orientation = metric_orientation / (index + 1)
-            estimator.logger.info(
-                f"intermediate mean translation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_translation}"
-            )
-            estimator.logger.info(
-                f"intermediate mean orientation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_orientation}"
-            )
+            # The following lines have been commented out to reduce console output
+            # intermediate_mean_loss_translation = metric_translation / (index + 1)
+            # intermediate_mean_loss_orientation = metric_orientation / (index + 1)
+            # estimator.logger.info(
+            #     f"intermediate mean translation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_translation}"
+            # )
+            # estimator.logger.info(
+            #     f"intermediate mean orientation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_orientation}"
+            # )
 
             if is_training:
                 loss_translation += criterion_translation(
@@ -164,7 +165,7 @@ def evaluation_over_batch(
                     output_orientation, target_orientation
                 )
                 train_loss = (
-                    loss_translation + config.train.beta_loss * loss_orientation
+                        loss_translation + config.train.beta_loss * loss_orientation
                 )
 
         else:
@@ -180,10 +181,11 @@ def evaluation_over_batch(
                 output_translation, target_translation
             )
 
-            intermediate_mean_loss_translation = metric_translation / (index + 1)
-            estimator.logger.info(
-                f"intermediate mean translation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_translation}"
-            )
+            # The following line has been commented out to reduce console output
+            # intermediate_mean_loss_translation = metric_translation / (index + 1)
+            # estimator.logger.info(
+            #     f"intermediate mean translation loss after mini batch {index + 1} in epoch {epoch} is: {intermediate_mean_loss_translation}"
+            # )
 
             if is_training:
                 loss_translation += criterion_translation(
